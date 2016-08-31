@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.model.Manufacturer;
@@ -17,6 +18,9 @@ import com.example.repository.ManufacturerRepository;
 
 @RestController
 public class ManufacturerAPI {
+	
+	@Autowired
+	private OrderClient orderClient;
 
 	@Autowired
 	private ManufacturerRepository manufacturerRepository;
@@ -45,5 +49,11 @@ public class ManufacturerAPI {
 			MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
 	public ResponseEntity<List<Manufacturer>> findAll() {
 		return new ResponseEntity<List<Manufacturer>>(manufacturerRepository.findAll(), HttpStatus.OK);
+	}
+	
+	@RequestMapping("/feignclient")
+	@ResponseBody
+	public List<Order> findAllByOrders(){
+		return orderClient.findAll();
 	}
 }
